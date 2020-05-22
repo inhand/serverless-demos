@@ -1,0 +1,55 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>File Uploader</mat-toolbar-row>
+</mat-toolbar>
+
+<form fxLayout="column" fxLayoutAlign="center center" [formGroup]="fileUploadForm"
+      (ngSubmit)="onSubmit(fileUploadForm.value)">
+  <mat-card>
+    <mat-form-field appearance="outline" fxFlexFill>
+      <mat-label>Filename</mat-label>
+      <input matInput type="text" placeholder="Enter filename" formControlName="fileName" class="form-control">
+      <mat-error *ngIf="fileName.invalid && (fileName.dirty || fileName.touched)">* Please enter a filename</mat-error>
+    </mat-form-field>
+
+
+    <div class="choose-file-wrapper">
+      <label for="file-upload" class="custom-file-upload" (click)="selectFileClicked()">Select File to Upload</label>
+      <input id="file-upload" type="file" #file (change)="fileSelected()" formControlName="selectedFile">
+      <mat-label>{{fileToUploadName}}</mat-label>
+    </div>
+
+    <mat-error *ngIf="selectedFile.invalid && (selectedFile.dirty || selectedFile.touched)">
+      * Please select a file to upload
+    </mat-error>
+    <mat-error *ngIf="fileTooBig">
+      * Please select a file no bigger than 5Mb
+    </mat-error>
+
+    <mat-form-field appearance="outline" fxFlexFill>
+      <mat-label>Please select the category</mat-label>
+      <mat-select formControlName="category">
+        <mat-option *ngFor="let category of categories" [value]="category.value">{{category.name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="category.invalid && (category.dirty || category.touched)">* Please select the category
+      </mat-error>
+    </mat-form-field>
+
+    <app-terms-conditions></app-terms-conditions>
+
+
+    <div class="terms-accept">
+      <mat-label fxFlex="40">Do you agree to the terms and conditions</mat-label>
+      <mat-checkbox formControlName="termsAgreed" fxFlex></mat-checkbox>
+    </div>
+    <mat-error *ngIf="termsAgreed.invalid && (termsAgreed.dirty || termsAgreed.touched)">
+      * Please agree to the terms and conditions
+    </mat-error>
+
+    <mat-card-actions fxFlexFill>
+      <button mat-raised-button color="primary" type="submit" [disabled]="!fileUploadForm.valid">Upload File</button>
+      <button mat-raised-button color="accent" type="reset" (click)="resetForm()">Reset Form</button>
+    </mat-card-actions>
+  </mat-card>
+  <mat-spinner *ngIf="isUploading"></mat-spinner>
+</form>
+

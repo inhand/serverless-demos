@@ -1,0 +1,64 @@
+service: FileUploader
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:*
+        - s3:PutObject
+      Resource: 'arn:aws:s3:::${self:custom.bucketName}/*'
+  environment:
+    BUCKET_NAME: ${self:custom.bucketName}
+
+plugins:
+  - serverless-dynamodb-local
+  - serverless-offline
+  - serverless-webpack
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+  bucketName: cloud-gateway-uploads-bs
+
+functions:
+
+  UploadUrl:
+    handler: lambdas/FileUploader/endpoints/GetPreSignedUrl.handler
+    events:
+      - http:
+          path: uploadurl
+          method: POST
+          cors: true
+
+  UploadFileProperties:
+    handler: lambdas/FileUploader/endpoints/UploadFileProperties.handler
+    events:
+      - http:
+          path: fileproperties
+          method: POST
+          cors: true
+
+resources:
+  Resources:
+    UploadBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.bucketName}
+        AccessControl: PublicRead
+        CorsConfiguration:
+          CorsRules:
+              - AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - HEAD
+                AllowedOrigins:
+                  - "*"
+                AllowedHeaders:
+                  - "*"
+
