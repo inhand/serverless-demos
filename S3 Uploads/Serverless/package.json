@@ -16,7 +16,7 @@
     "@types/aws-lambda": "^8.10.17",
     "@types/node": "^10.12.18",
     "serverless-iam-roles-per-function": "^2.0.2",
-    "serverless-offline": "^6.0.0-alpha.65",
+    "serverless-offline": "^12.0.3",
     "serverless-webpack": "^5.2.0",
     "sls-dev-tools": "^1.1.6",
     "ts-loader": "^5.3.3",
