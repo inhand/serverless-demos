@@ -9,7 +9,7 @@
   "license": "ISC",
   "dependencies": {
     "serverless-cognito-add-custom-attributes": "^0.3.0",
-    "serverless-dynamodb-local": "^0.2.39",
+    "serverless-dynamodb-local": "^1.0.2",
     "source-map-support": "^0.5.10"
   },
   "devDependencies": {
